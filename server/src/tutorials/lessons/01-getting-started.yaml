@@ -1,0 +1,73 @@
+id: getting-started
+title: Getting Started with Claude Code
+level: beginner
+duration: "10 min"
+description: Learn the basics of Claude Code CLI - checking installation, getting help, and running your first commands.
+
+steps:
+  - id: welcome
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Hello and welcome to Claude Code training! I'm Elisabeth, and I'll be your guide today. In this lesson, you'll learn how to verify your Claude Code installation and explore the basic commands. Let's get started!"
+
+  - id: check-version
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "First, let's verify Claude Code is installed by checking the version. Watch as I type the command."
+    terminal:
+      command: "claude --version"
+      demo: true
+      demoDelay: 80
+    onSuccess: "You can see the version number displayed. This confirms Claude Code is properly installed."
+
+  - id: try-help
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Now it's your turn! Type 'claude --help' and press Enter to see all available options."
+    validation:
+      type: output-contains
+      value: "Usage:"
+    hints:
+      - "Type: claude --help"
+      - "Make sure to press Enter after typing the command"
+      - "The command shows all available flags and options"
+    onSuccess: "Excellent! You've just seen all the command-line options available in Claude Code."
+
+  - id: explain-flags
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "The help output shows you many useful flags. The most important ones for beginners are: dash p for print mode which runs a single query, dash c to continue your last conversation, and dash r to resume a previous session. Let's try print mode next."
+
+  - id: print-mode-demo
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "Print mode is perfect for quick one-off questions. Watch how I use the dash p flag with a simple query."
+    terminal:
+      command: "echo 'Example: claude -p \"What is TypeScript?\"'"
+      demo: true
+      demoDelay: 60
+    onSuccess: "In a real session, Claude would respond with an explanation and then exit automatically."
+
+  - id: try-echo
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Let's practice with a simple echo command. Type 'echo Hello Claude Code' and press Enter."
+    validation:
+      type: output-contains
+      value: "Hello Claude Code"
+    hints:
+      - "Type: echo Hello Claude Code"
+      - "Echo simply prints back whatever text you give it"
+    onSuccess: "You've successfully run a terminal command. This same terminal will be used when practicing with Claude Code."
+
+  - id: completion
+    type: voice
+    voice:
+      speaker: Finn
+      text: "Hei! Congratulations! You've completed your first lesson! You now know how to check the Claude Code version, view help, and understand the basic command structure. Fantastisk job! See you in the next lesson!"

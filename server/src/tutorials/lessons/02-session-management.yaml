@@ -1,0 +1,95 @@
+id: session-management
+title: Session Management
+level: beginner
+duration: "12 min"
+description: Learn how to continue conversations, resume sessions, and manage your Claude Code history effectively.
+
+steps:
+  - id: welcome
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Welcome back! In this lesson, we'll explore session management in Claude Code. You'll learn how to continue conversations, resume old sessions, and even fork your session history. These features are essential for maintaining context across coding sessions."
+
+  - id: explain-sessions
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Every time you interact with Claude Code, your conversation is saved as a session. Sessions have unique IDs and store the full context of your discussion. This means you can pick up exactly where you left off, even days later."
+
+  - id: continue-demo
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "The simplest way to continue working is with the dash c flag. This picks up your most recent conversation. Let me show you the command."
+    terminal:
+      command: "echo 'Command: claude -c  (continues most recent session)'"
+      demo: true
+      demoDelay: 70
+    onSuccess: "The dash c flag is your go-to option when you want to keep working on what you started earlier."
+
+  - id: try-pwd
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Let's practice a quick command. Type 'pwd' to see your current working directory."
+    validation:
+      type: output-contains
+      value: "/"
+    hints:
+      - "Type: pwd"
+      - "pwd stands for 'print working directory'"
+    onSuccess: "Your current directory is displayed. Claude Code always starts in a specific working directory."
+
+  - id: resume-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Sometimes you want to resume a specific session, not just the most recent one. The dash r flag opens an interactive picker showing your recent sessions. You can also provide a session ID directly to jump to a specific conversation."
+
+  - id: resume-demo
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "Here's how you would resume a session by ID. The session ID is a unique identifier that Claude Code assigns to each conversation."
+    terminal:
+      command: "echo 'Command: claude -r abc123  (resumes session with ID abc123)'"
+      demo: true
+      demoDelay: 65
+    onSuccess: "When you know the exact session you want, providing the ID is the fastest way to resume."
+
+  - id: fork-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Here's a powerful feature: forking sessions. When you fork a session, you create a new branch from an existing conversation. This is perfect when you want to try a different approach without losing your original work."
+
+  - id: fork-demo
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "To fork a session, combine the resume flag with the fork-session flag. Watch the command structure."
+    terminal:
+      command: "echo 'Command: claude -r abc123 --fork-session'"
+      demo: true
+      demoDelay: 60
+    onSuccess: "Forking creates a new session that starts with all the context from the original, but branches off independently."
+
+  - id: try-ls
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Let's try another command. Type 'ls' to list files in the current directory."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: ls"
+      - "ls lists directory contents"
+    onSuccess: "You can see the files in your current directory. Claude Code can read and modify these files when you ask it to."
+
+  - id: completion
+    type: voice
+    voice:
+      speaker: Finn
+      text: "Hei there! You've mastered session management! You now know how to continue with dash c, resume specific sessions with dash r, and even fork sessions to try different approaches. These skills will make your Claude Code workflow much more efficient. Kjempe bra!"

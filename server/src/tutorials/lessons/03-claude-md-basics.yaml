@@ -1,0 +1,108 @@
+id: claude-md-basics
+title: CLAUDE.md Configuration
+level: beginner
+duration: "15 min"
+description: Discover how to configure Claude Code for your projects using CLAUDE.md files - the key to consistent, context-aware AI assistance.
+
+steps:
+  - id: welcome
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Welcome to the CLAUDE.md lesson! This is one of the most important features in Claude Code. CLAUDE.md files let you configure how Claude understands and works with your projects. By the end of this lesson, you'll know how to create and use these configuration files effectively."
+
+  - id: what-is-claude-md
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "CLAUDE.md is a special markdown file that Claude Code reads automatically when you start a session. It contains project-specific instructions, coding standards, and context that helps Claude understand your codebase better. Think of it as a briefing document for your AI assistant."
+
+  - id: hierarchy-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "CLAUDE.md files follow a hierarchy. First, Claude reads your global file from your home directory's dot claude folder. Then it reads the project-level file in your repository root. Finally, it can read directory-specific files for specialized contexts. This layered approach gives you flexible control."
+
+  - id: show-hierarchy
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "Let me show you the hierarchy. Each level adds more specific context."
+    terminal:
+      command: "echo '1. ~/.claude/CLAUDE.md    (global settings)'\necho '2. ./CLAUDE.md            (project root)'\necho '3. ./src/CLAUDE.md        (directory-specific)'"
+      demo: true
+      demoDelay: 50
+    onSuccess: "These files are loaded in order, with more specific settings taking precedence."
+
+  - id: init-command
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "The easiest way to create a CLAUDE.md file is using the slash init command inside a Claude Code session. It automatically analyzes your project and generates a customized configuration. Let's see what that looks like."
+
+  - id: init-demo
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "Inside Claude Code, you would type slash init. The command analyzes your project structure and creates a tailored CLAUDE.md file."
+    terminal:
+      command: "echo 'Inside Claude Code session:'\necho '> /init'\necho ''\necho 'Claude analyzes: package.json, tsconfig, directory structure...'\necho 'Creates: CLAUDE.md with project-specific guidance'"
+      demo: true
+      demoDelay: 55
+    onSuccess: "The init command saves you time by auto-detecting your tech stack and coding conventions."
+
+  - id: content-sections
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "A good CLAUDE.md file has several key sections. First, a Project Overview describing what the project does. Then Tech Stack listing your frameworks and tools. Next, Commands for common tasks like building and testing. Finally, Code Style with your team's conventions and preferences."
+
+  - id: try-cat
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Let's practice viewing files. Type 'cat /etc/hostname' to see the system hostname."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: cat /etc/hostname"
+      - "cat displays file contents"
+      - "The hostname identifies this system"
+    onSuccess: "The cat command displays file contents. This is how you can view your CLAUDE.md files too."
+
+  - id: example-content
+    type: demo
+    voice:
+      speaker: Elisabeth
+      text: "Here's what a typical CLAUDE.md looks like for a React project."
+    terminal:
+      command: "echo '# CLAUDE.md Example'\necho ''\necho '## Project Overview'\necho 'React dashboard with TypeScript and Tailwind CSS'\necho ''\necho '## Commands'\necho '- npm run dev    # Start development server'\necho '- npm test       # Run test suite'\necho ''\necho '## Code Style'\necho '- Use functional components with hooks'\necho '- Prefer named exports'"
+      demo: true
+      demoDelay: 40
+    onSuccess: "This structure gives Claude essential context about your project from the start."
+
+  - id: best-practices
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Some best practices: Keep your CLAUDE.md concise but complete. Include commands Claude might need to run. Document any non-obvious project conventions. Update it as your project evolves. And remember, you can use directory-specific files for specialized areas like your API or components folder."
+
+  - id: try-date
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "One more quick practice. Type 'date' to see the current date and time."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: date"
+      - "date shows the current system time"
+    onSuccess: "The date command confirms the system is working correctly."
+
+  - id: completion
+    type: voice
+    voice:
+      speaker: Finn
+      text: "Hei hei! You've learned all about CLAUDE.md files! You understand the hierarchy, know how to use slash init, and have seen what good configuration looks like. This knowledge will make Claude Code work much better for your specific projects. Veldig bra! You're becoming a Claude Code expert!"

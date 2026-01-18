@@ -4,8 +4,9 @@ import {
   ChevronRight, ChevronDown, CheckCircle, Play, BookOpen, Code,
   Rocket, Award, Settings, Search, ExternalLink, Copy, Check,
   AlertCircle, Info, Star, Lock, Unlock, GraduationCap, Target,
-  Wrench, Database, Globe, Shield, RefreshCw, Command
+  Wrench, Database, Globe, Shield, RefreshCw, Command, Headphones
 } from 'lucide-react';
+import { GuidedTutorial } from './components/index.js';
 
 // ============================================================================
 // CLI COMMAND DATABASE - Complete Reference
@@ -1293,7 +1294,7 @@ const ProgressTracker = ({ completedModules, totalModules }) => {
 // MAIN APP COMPONENT
 // ============================================================================
 export default function App() {
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState('guided');
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [expandedModules, setExpandedModules] = useState(new Set(['getting-started']));
   const [completedModules, setCompletedModules] = useState(new Set());
@@ -1343,6 +1344,7 @@ export default function App() {
           {/* Tabs */}
           <div className="flex flex-wrap gap-2">
             {[
+              { id: 'guided', icon: Headphones, label: 'Guided Tutorial' },
               { id: 'learn', icon: BookOpen, label: 'Training Modules' },
               { id: 'practice', icon: Terminal, label: 'Practice Terminal' },
               { id: 'reference', icon: FileText, label: 'CLI Reference' },
@@ -1367,13 +1369,22 @@ export default function App() {
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 py-6">
-        {/* Progress Tracker - Show on all tabs */}
-        <div className="mb-6">
-          <ProgressTracker
-            completedModules={completedModules.size}
-            totalModules={totalModules}
-          />
-        </div>
+        {/* Progress Tracker - Show on non-guided tabs */}
+        {activeTab !== 'guided' && (
+          <div className="mb-6">
+            <ProgressTracker
+              completedModules={completedModules.size}
+              totalModules={totalModules}
+            />
+          </div>
+        )}
+
+        {/* Guided Tutorial Tab - Voice-guided training with real terminal */}
+        {activeTab === 'guided' && (
+          <div className="bg-gray-900 rounded-2xl p-6">
+            <GuidedTutorial />
+          </div>
+        )}
 
         {activeTab === 'learn' && (
           <div className="space-y-6">

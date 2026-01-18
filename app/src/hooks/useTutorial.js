@@ -14,6 +14,9 @@ export function useTutorial(socket) {
   const [completionData, setCompletionData] = useState(null);
   const [error, setError] = useState(null);
   const [availableLessons, setAvailableLessons] = useState([]);
+  const [validationMessage, setValidationMessage] = useState(null);
+  const [completedSteps, setCompletedSteps] = useState(new Set());
+  const [lastValidationResult, setLastValidationResult] = useState(null);
 
   // Fetch available lessons
   const fetchLessons = useCallback(async () => {
@@ -40,14 +43,14 @@ export function useTutorial(socket) {
       setCompletionData(null);
 
       socket.emit('tutorial:start', { lessonId }, (response) => {
-        if (response.success) {
+        if (response?.success) {
           setCurrentLesson(response.lesson);
           setTotalSteps(response.lesson.totalSteps);
           setStepIndex(0);
           resolve(response.lesson);
         } else {
-          setError(response.error);
-          reject(new Error(response.error));
+          setError(response?.error || 'Unknown error');
+          reject(new Error(response?.error || 'Unknown error'));
         }
       });
     });
@@ -122,16 +125,65 @@ export function useTutorial(socket) {
       }
     };
 
+    const handleValidationSuccess = (data) => {
+      console.log('[Tutorial] Validation success:', data);
+      setLastValidationResult({
+        success: true,
+        message: data.message || 'Step completed successfully!',
+        timestamp: Date.now()
+      });
+      setValidationMessage(data.message || 'Step completed successfully!');
+      // Mark step as completed
+      setCompletedSteps(prev => new Set([...prev, data.stepIndex ?? stepIndex]));
+      // Clear message after a delay
+      setTimeout(() => setValidationMessage(null), 3000);
+    };
+
+    const handleValidationFail = (data) => {
+      console.log('[Tutorial] Validation failed:', data);
+      setLastValidationResult({
+        success: false,
+        message: data.message || 'Try again',
+        hint: data.hint,
+        timestamp: Date.now()
+      });
+      setValidationMessage(data.message || 'Not quite right. Try again!');
+      // Clear message after a longer delay for failures
+      setTimeout(() => setValidationMessage(null), 5000);
+    };
+
+    const handleStateChange = (data) => {
+      console.log('[Tutorial] State change:', data);
+      setTutorialState(data.state);
+    };
+
+    const handleStarted = (data) => {
+      console.log('[Tutorial] Started event received:', data);
+      if (data?.success && data?.lesson) {
+        setCurrentLesson(data.lesson);
+        setTotalSteps(data.lesson.totalSteps);
+        setStepIndex(0);
+      }
+    };
+
     socket.on('tutorial:step', handleStep);
+    socket.on('tutorial:started', handleStarted);
     socket.on('tutorial:complete', handleComplete);
     socket.on('tutorial:error', handleError);
+    socket.on('tutorial:validation-success', handleValidationSuccess);
+    socket.on('tutorial:validation-fail', handleValidationFail);
+    socket.on('tutorial:state', handleStateChange);
 
     return () => {
       socket.off('tutorial:step', handleStep);
+      socket.off('tutorial:started', handleStarted);
       socket.off('tutorial:complete', handleComplete);
       socket.off('tutorial:error', handleError);
+      socket.off('tutorial:validation-success', handleValidationSuccess);
+      socket.off('tutorial:validation-fail', handleValidationFail);
+      socket.off('tutorial:state', handleStateChange);
     };
-  }, [socket]);
+  }, [socket, stepIndex]);
 
   // Calculate progress percentage
   const progress = totalSteps > 0 ? Math.round((stepIndex / totalSteps) * 100) : 0;
@@ -148,6 +200,9 @@ export function useTutorial(socket) {
     error,
     availableLessons,
     progress,
+    validationMessage,
+    completedSteps,
+    lastValidationResult,
 
     // Actions
     fetchLessons,

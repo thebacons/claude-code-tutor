@@ -24,7 +24,28 @@ export interface ServerToClientEvents {
   'tutorial:step': (data: TutorialStepData) => void;
   'tutorial:complete': (data: TutorialCompleteData) => void;
   'tutorial:error': (data: TutorialErrorData) => void;
+  'tutorial:validation-success': (data: ValidationSuccessData) => void;
+  'tutorial:validation-fail': (data: ValidationFailData) => void;
+  'tutorial:state': (data: TutorialStateData) => void;
+  'tutorial:started': (data: TutorialStartResponse) => void;
   'error': (data: ErrorData) => void;
+}
+
+// Validation Types
+export interface ValidationSuccessData {
+  message: string;
+  stepIndex?: number;
+}
+
+export interface ValidationFailData {
+  message: string;
+  stepIndex?: number;
+  hint?: string;
+}
+
+export interface TutorialStateData {
+  state: string;
+  step?: TutorialStep;
 }
 
 // Terminal Types

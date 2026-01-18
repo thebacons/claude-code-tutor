@@ -194,20 +194,25 @@ io.on('connection', (socket) => {
       });
     }
 
-    // Start the tutorial
+    // Send callback IMMEDIATELY before starting the tutorial
+    // (since startLesson is async and does voice synthesis which takes time)
+    const lessonData = {
+      success: true,
+      lesson: {
+        id: lesson.id,
+        title: lesson.title,
+        totalSteps: lesson.steps.length
+      }
+    };
+    callback(lessonData);
+    socket.emit('tutorial:started', lessonData);
+
+    // Start the tutorial (this may take time for voice synthesis)
     const result = await tutorialEngine.startLesson(session.id, data.lessonId, terminalSessionId);
 
-    if (result.success) {
-      callback({
-        success: true,
-        lesson: {
-          id: lesson.id,
-          title: lesson.title,
-          totalSteps: lesson.steps.length
-        }
-      });
-    } else {
-      callback({ success: false, error: result.error });
+    if (!result.success) {
+      // Emit error event since callback already sent
+      socket.emit('tutorial:error', { message: result.error || 'Unknown error', recoverable: false });
     }
   });
 
@@ -271,6 +276,28 @@ io.on('connection', (socket) => {
 
   tutorialEngine.on('error', (message, recoverable) => {
     socket.emit('tutorial:error', { message, recoverable });
+  });
+
+  tutorialEngine.on('validation-success', (message) => {
+    const ctx = tutorialEngine.getContext(session.id);
+    socket.emit('tutorial:validation-success', {
+      message,
+      stepIndex: ctx?.currentStepIndex
+    });
+  });
+
+  tutorialEngine.on('validation-fail', (message) => {
+    const ctx = tutorialEngine.getContext(session.id);
+    const hint = tutorialEngine.getHint(session.id);
+    socket.emit('tutorial:validation-fail', {
+      message,
+      stepIndex: ctx?.currentStepIndex,
+      hint: hint?.hint
+    });
+  });
+
+  tutorialEngine.on('waiting-input', (step) => {
+    socket.emit('tutorial:state', { state: 'WAITING_INPUT', step });
   });
 
   // ============================================================================

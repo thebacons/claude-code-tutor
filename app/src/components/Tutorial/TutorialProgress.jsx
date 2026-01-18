@@ -3,14 +3,17 @@
 // ============================================================================
 
 import React from 'react';
-import { CheckCircle, Circle, PlayCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, Circle, PlayCircle, Loader2, XCircle, AlertCircle } from 'lucide-react';
 
 export function TutorialProgress({
   currentStep,
   stepIndex,
   totalSteps,
   tutorialState,
-  lessonTitle
+  lessonTitle,
+  validationMessage,
+  completedSteps,
+  lastValidationResult
 }) {
   // Calculate progress percentage
   const progress = totalSteps > 0 ? Math.round((stepIndex / totalSteps) * 100) : 0;
@@ -89,20 +92,66 @@ export function TutorialProgress({
         </div>
       )}
 
-      {/* Step Dots */}
-      <div className="flex items-center justify-center gap-1 pt-2">
-        {Array.from({ length: totalSteps }, (_, i) => (
-          <div
-            key={i}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              i < stepIndex
-                ? 'bg-green-400'
-                : i === stepIndex
-                ? 'bg-blue-400 scale-125'
-                : 'bg-gray-600'
-            }`}
-          />
-        ))}
+      {/* Validation Feedback */}
+      {validationMessage && (
+        <div
+          className={`rounded-lg p-3 flex items-center gap-3 animate-pulse ${
+            lastValidationResult?.success
+              ? 'bg-green-900/50 border border-green-500/50'
+              : 'bg-yellow-900/50 border border-yellow-500/50'
+          }`}
+        >
+          {lastValidationResult?.success ? (
+            <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+          ) : (
+            <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0" />
+          )}
+          <div className="flex-1">
+            <p className={`text-sm font-medium ${
+              lastValidationResult?.success ? 'text-green-300' : 'text-yellow-300'
+            }`}>
+              {validationMessage}
+            </p>
+            {lastValidationResult?.hint && (
+              <p className="text-xs text-yellow-400/70 mt-1">
+                Hint: {lastValidationResult.hint}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Step Checklist */}
+      <div className="space-y-2 pt-2">
+        <span className="text-xs text-gray-500 uppercase tracking-wider">Step Progress</span>
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          {Array.from({ length: totalSteps }, (_, i) => {
+            const isCompleted = completedSteps?.has(i) || i < stepIndex;
+            const isCurrent = i === stepIndex;
+
+            return (
+              <div
+                key={i}
+                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+                  isCompleted
+                    ? 'bg-green-500/20 border-2 border-green-500'
+                    : isCurrent
+                    ? 'bg-blue-500/20 border-2 border-blue-500 scale-110'
+                    : 'bg-gray-700/50 border-2 border-gray-600'
+                }`}
+                title={`Step ${i + 1}${isCompleted ? ' (completed)' : isCurrent ? ' (current)' : ''}`}
+              >
+                {isCompleted ? (
+                  <CheckCircle className="w-4 h-4 text-green-400" />
+                ) : isCurrent ? (
+                  <span className="text-xs font-bold text-blue-400">{i + 1}</span>
+                ) : (
+                  <span className="text-xs text-gray-500">{i + 1}</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

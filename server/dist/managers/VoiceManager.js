@@ -50,7 +50,14 @@ export class VoiceManager {
             item.resolve(result);
         }
         catch (error) {
-            item.reject(error);
+            // Don't reject - return a failure result instead so tutorial can continue
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            console.error(`[VoiceManager] Queue error: ${errorMessage}`);
+            item.resolve({
+                success: false,
+                error: errorMessage,
+                duration: 2 // Short fallback duration
+            });
         }
         this.isProcessing = false;
         this.processQueue();

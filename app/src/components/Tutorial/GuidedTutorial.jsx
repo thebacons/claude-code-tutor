@@ -45,6 +45,9 @@ export function GuidedTutorial() {
     error: tutorialError,
     availableLessons,
     progress,
+    validationMessage,
+    completedSteps,
+    lastValidationResult,
     fetchLessons,
     startLesson,
     requestHint,
@@ -162,6 +165,9 @@ export function GuidedTutorial() {
                 totalSteps={totalSteps}
                 tutorialState={tutorialState}
                 lessonTitle={currentLesson.title}
+                validationMessage={validationMessage}
+                completedSteps={completedSteps}
+                lastValidationResult={lastValidationResult}
               />
 
               {/* Tutorial Controls */}

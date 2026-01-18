@@ -4,26 +4,62 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
+// Use window to persist terminal instance across HMR and re-renders
+// This ensures only one terminal exists even with Vite hot reload
+const getGlobalState = () => {
+  if (!window.__LIVE_TERMINAL_STATE__) {
+    window.__LIVE_TERMINAL_STATE__ = {
+      terminal: null,
+      sessionId: null,
+      fitAddon: null
+    };
+  }
+  return window.__LIVE_TERMINAL_STATE__;
+};
+
 export function LiveTerminal({ socket, isConnected, onReady }) {
   const terminalRef = useRef(null);
   const xtermRef = useRef(null);
   const fitAddonRef = useRef(null);
   const sessionIdRef = useRef(null);
-  const sessionCreatedRef = useRef(false);  // Prevent duplicate session creation
-  const terminalInitializedRef = useRef(false);  // Prevent duplicate terminal init
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
 
   // Initialize terminal
   useEffect(() => {
-    // Prevent double initialization (React StrictMode)
-    if (terminalInitializedRef.current) return;
-    terminalInitializedRef.current = true;
+    const globalState = getGlobalState();
+
+    // If we already have a global terminal instance, reuse it
+    if (globalState.terminal && terminalRef.current) {
+      // Reattach existing terminal to DOM if needed
+      if (!terminalRef.current.hasChildNodes()) {
+        globalState.terminal.open(terminalRef.current);
+        if (globalState.fitAddon) globalState.fitAddon.fit();
+      }
+      xtermRef.current = globalState.terminal;
+      fitAddonRef.current = globalState.fitAddon;
+      sessionIdRef.current = globalState.sessionId;
+      setIsReady(true);
+      onReady?.(globalState.terminal);
+      return;
+    }
+
+    // Check if terminal is already being initialized (async race condition)
+    if (globalState.initializing) {
+      return;
+    }
+    globalState.initializing = true;
 
     let terminal = null;
     let fitAddon = null;
+    let cancelled = false;
 
     const initTerminal = async () => {
+      // Double-check we still need to init after async imports
+      if (cancelled || globalState.terminal) {
+        globalState.initializing = false;
+        return;
+      }
       try {
         const { Terminal } = await import('@xterm/xterm');
         const { FitAddon } = await import('@xterm/addon-fit');
@@ -79,6 +115,10 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
           terminal.writeln('');
           terminal.writeln('\x1b[33mWaiting for connection...\x1b[0m');
 
+          // Store globally to prevent duplicates
+          globalState.terminal = terminal;
+          globalState.fitAddon = fitAddon;
+          globalState.initializing = false;
           xtermRef.current = terminal;
           setIsReady(true);
           onReady?.(terminal);
@@ -86,6 +126,7 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
       } catch (err) {
         console.error('[LiveTerminal] Initialization error:', err);
         setError('Failed to initialize terminal');
+        globalState.initializing = false;
       }
     };
 
@@ -111,8 +152,10 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
     window.addEventListener('resize', handleResize);
 
     return () => {
+      cancelled = true;
       window.removeEventListener('resize', handleResize);
-      if (terminal) terminal.dispose();
+      // Don't dispose terminal on cleanup - we want to keep it for reuse
+      // The terminal will be disposed when the page unloads
     };
   }, [onReady, socket]);
 
@@ -120,13 +163,18 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
   useEffect(() => {
     if (!isConnected || !socket?.emit || !xtermRef.current) return;
 
-    // Prevent duplicate session creation
-    if (sessionCreatedRef.current) return;
-    sessionCreatedRef.current = true;
+    const globalState = getGlobalState();
+
+    // If we already have a global session, reuse it
+    if (globalState.sessionId) {
+      sessionIdRef.current = globalState.sessionId;
+      return;
+    }
 
     // Create server-side terminal session
     socket.emit('terminal:create', (response) => {
       if (response.success) {
+        globalState.sessionId = response.sessionId;
         sessionIdRef.current = response.sessionId;
         xtermRef.current.writeln('');
         xtermRef.current.writeln('\x1b[32m✓ Terminal session created\x1b[0m');
@@ -184,7 +232,7 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
       socket.off('terminal:output', handleOutput);
       socket.off('terminal:exit', handleExit);
     };
-  }, [isConnected, socket]);
+  }, [isConnected, socket, isReady]);
 
   // Get session ID (for parent components)
   const getSessionId = useCallback(() => sessionIdRef.current, []);

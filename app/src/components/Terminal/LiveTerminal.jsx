@@ -9,11 +9,17 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
   const xtermRef = useRef(null);
   const fitAddonRef = useRef(null);
   const sessionIdRef = useRef(null);
+  const sessionCreatedRef = useRef(false);  // Prevent duplicate session creation
+  const terminalInitializedRef = useRef(false);  // Prevent duplicate terminal init
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
 
   // Initialize terminal
   useEffect(() => {
+    // Prevent double initialization (React StrictMode)
+    if (terminalInitializedRef.current) return;
+    terminalInitializedRef.current = true;
+
     let terminal = null;
     let fitAddon = null;
 
@@ -113,6 +119,10 @@ export function LiveTerminal({ socket, isConnected, onReady }) {
   // Create terminal session when connected
   useEffect(() => {
     if (!isConnected || !socket?.emit || !xtermRef.current) return;
+
+    // Prevent duplicate session creation
+    if (sessionCreatedRef.current) return;
+    sessionCreatedRef.current = true;
 
     // Create server-side terminal session
     socket.emit('terminal:create', (response) => {

@@ -2,7 +2,7 @@
 // GuidedTutorial - Main Tutorial Interface with Voice and Terminal
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Wifi, WifiOff, HelpCircle, SkipForward, StopCircle, Lightbulb } from 'lucide-react';
 
 import { useWebSocket } from '../../hooks/useWebSocket.js';
@@ -30,8 +30,8 @@ export function GuidedTutorial() {
     getSocket
   } = useWebSocket();
 
-  // Create socket-like object for hooks
-  const socket = { emit, on, off };
+  // Memoize socket-like object to prevent re-renders causing duplicate terminals
+  const socket = useMemo(() => ({ emit, on, off }), [emit, on, off]);
 
   // Initialize tutorial state
   const {

@@ -9,7 +9,7 @@ steps:
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Welcome back! In this lesson, we'll explore session management in Claude Code. You'll learn how to continue conversations, resume old sessions, and even fork your session history. These features are essential for maintaining context across coding sessions."
+      text: "Welcome back! In this lesson, we'll explore session management in Claude Code. You'll learn how to continue conversations, resume old sessions, and view your session history. These features are essential for maintaining context across coding sessions."
 
   - id: explain-sessions
     type: voice
@@ -17,79 +17,87 @@ steps:
       speaker: Elisabeth
       text: "Every time you interact with Claude Code, your conversation is saved as a session. Sessions have unique IDs and store the full context of your discussion. This means you can pick up exactly where you left off, even days later."
 
-  - id: continue-demo
-    type: demo
+  - id: continue-explain
+    type: voice
     voice:
       speaker: Elisabeth
-      text: "The simplest way to continue working is with the dash c flag. This picks up your most recent conversation. Let me show you the command."
-    terminal:
-      command: "echo 'Command: claude -c  (continues most recent session)'"
-      demo: true
-      demoDelay: 70
-    onSuccess: "The dash c flag is your go-to option when you want to keep working on what you started earlier."
+      text: "The simplest way to continue working is with the dash c flag. This picks up your most recent conversation. You don't need to remember any session ID - Claude Code automatically finds your last session."
 
-  - id: try-pwd
+  - id: try-continue-help
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's practice a quick command. Type 'pwd' to see your current working directory."
+      text: "Let's explore the continue option. Type 'claude -c --help' to see how the continue flag works."
     validation:
       type: output-contains
-      value: "/"
+      value: ""
     hints:
-      - "Type: pwd"
-      - "pwd stands for 'print working directory'"
-    onSuccess: "Your current directory is displayed. Claude Code always starts in a specific working directory."
+      - "Type: claude -c --help"
+      - "The -c flag continues your most recent session"
+    onSuccess: "The dash c flag is your go-to option when you want to keep working on what you started earlier."
 
   - id: resume-explain
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Sometimes you want to resume a specific session, not just the most recent one. The dash r flag opens an interactive picker showing your recent sessions. You can also provide a session ID directly to jump to a specific conversation."
+      text: "Sometimes you want to resume a specific session, not just the most recent one. The dash r flag lets you resume any previous session. You can either use it without an argument to see a list, or provide a session ID directly."
 
-  - id: resume-demo
-    type: demo
-    voice:
-      speaker: Elisabeth
-      text: "Here's how you would resume a session by ID. The session ID is a unique identifier that Claude Code assigns to each conversation."
-    terminal:
-      command: "echo 'Command: claude -r abc123  (resumes session with ID abc123)'"
-      demo: true
-      demoDelay: 65
-    onSuccess: "When you know the exact session you want, providing the ID is the fastest way to resume."
-
-  - id: fork-explain
-    type: voice
-    voice:
-      speaker: Elisabeth
-      text: "Here's a powerful feature: forking sessions. When you fork a session, you create a new branch from an existing conversation. This is perfect when you want to try a different approach without losing your original work."
-
-  - id: fork-demo
-    type: demo
-    voice:
-      speaker: Elisabeth
-      text: "To fork a session, combine the resume flag with the fork-session flag. Watch the command structure."
-    terminal:
-      command: "echo 'Command: claude -r abc123 --fork-session'"
-      demo: true
-      demoDelay: 60
-    onSuccess: "Forking creates a new session that starts with all the context from the original, but branches off independently."
-
-  - id: try-ls
+  - id: try-resume-help
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's try another command. Type 'ls' to list files in the current directory."
+      text: "Let's check the resume options. Type 'claude -r --help' to see how session resumption works."
     validation:
       type: output-contains
       value: ""
     hints:
-      - "Type: ls"
-      - "ls lists directory contents"
-    onSuccess: "You can see the files in your current directory. Claude Code can read and modify these files when you ask it to."
+      - "Type: claude -r --help"
+      - "The -r flag resumes a specific session"
+      - "You can provide a session ID after -r"
+    onSuccess: "When you know the exact session you want, providing the ID after dash r is the fastest way to resume."
+
+  - id: mcp-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Claude Code can connect to MCP servers which provide additional tools and capabilities. The dash dash mcp-debug flag helps you troubleshoot MCP connections if something isn't working correctly."
+
+  - id: try-mcp-help
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Let's see the MCP debugging options. Type 'claude --mcp-debug --help' to explore MCP features."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: claude --mcp-debug --help"
+      - "MCP servers extend Claude Code's capabilities"
+      - "Debug mode shows detailed connection info"
+    onSuccess: "MCP debugging is invaluable when setting up custom tool integrations with Claude Code."
+
+  - id: model-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "You can also control which AI model Claude Code uses. The dash dash model flag lets you specify a particular model version. This is useful when you need specific capabilities or want to test with different models."
+
+  - id: try-model-help
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Type 'claude --model --help' to see how to select different AI models."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: claude --model --help"
+      - "Different models have different capabilities"
+      - "Model selection affects response quality and speed"
+    onSuccess: "You can now specify which model to use for your Claude Code sessions."
 
   - id: completion
     type: voice
     voice:
       speaker: Finn
-      text: "Hei there! You've mastered session management! You now know how to continue with dash c, resume specific sessions with dash r, and even fork sessions to try different approaches. These skills will make your Claude Code workflow much more efficient. Kjempe bra!"
+      text: "Hei there! You've mastered session management! You now know how to continue with dash c, resume specific sessions with dash r, debug MCP connections, and select AI models. These skills will make your Claude Code workflow much more efficient. Kjempe bra!"

@@ -23,86 +23,102 @@ steps:
       speaker: Elisabeth
       text: "CLAUDE.md files follow a hierarchy. First, Claude reads your global file from your home directory's dot claude folder. Then it reads the project-level file in your repository root. Finally, it can read directory-specific files for specialized contexts. This layered approach gives you flexible control."
 
-  - id: show-hierarchy
-    type: demo
-    voice:
-      speaker: Elisabeth
-      text: "Let me show you the hierarchy. Each level adds more specific context."
-    terminal:
-      command: "echo '1. ~/.claude/CLAUDE.md    (global settings)'\necho '2. ./CLAUDE.md            (project root)'\necho '3. ./src/CLAUDE.md        (directory-specific)'"
-      demo: true
-      demoDelay: 50
-    onSuccess: "These files are loaded in order, with more specific settings taking precedence."
-
-  - id: init-command
-    type: voice
-    voice:
-      speaker: Elisabeth
-      text: "The easiest way to create a CLAUDE.md file is using the slash init command inside a Claude Code session. It automatically analyzes your project and generates a customized configuration. Let's see what that looks like."
-
-  - id: init-demo
-    type: demo
-    voice:
-      speaker: Elisabeth
-      text: "Inside Claude Code, you would type slash init. The command analyzes your project structure and creates a tailored CLAUDE.md file."
-    terminal:
-      command: "echo 'Inside Claude Code session:'\necho '> /init'\necho ''\necho 'Claude analyzes: package.json, tsconfig, directory structure...'\necho 'Creates: CLAUDE.md with project-specific guidance'"
-      demo: true
-      demoDelay: 55
-    onSuccess: "The init command saves you time by auto-detecting your tech stack and coding conventions."
-
-  - id: content-sections
-    type: voice
-    voice:
-      speaker: Elisabeth
-      text: "A good CLAUDE.md file has several key sections. First, a Project Overview describing what the project does. Then Tech Stack listing your frameworks and tools. Next, Commands for common tasks like building and testing. Finally, Code Style with your team's conventions and preferences."
-
-  - id: try-cat
+  - id: check-claude-dir
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's practice viewing files. Type 'cat /etc/hostname' to see the system hostname."
+      text: "Let's check if the Claude configuration directory exists. Type 'claude config list' to see your current settings."
     validation:
       type: output-contains
       value: ""
     hints:
-      - "Type: cat /etc/hostname"
-      - "cat displays file contents"
-      - "The hostname identifies this system"
-    onSuccess: "The cat command displays file contents. This is how you can view your CLAUDE.md files too."
+      - "Type: claude config list"
+      - "This shows your current Claude Code configuration"
+      - "Configuration determines default behaviors"
+    onSuccess: "You can see your Claude Code settings. The config command helps you understand your current setup."
 
-  - id: example-content
-    type: demo
+  - id: init-explain
+    type: voice
     voice:
       speaker: Elisabeth
-      text: "Here's what a typical CLAUDE.md looks like for a React project."
-    terminal:
-      command: "echo '# CLAUDE.md Example'\necho ''\necho '## Project Overview'\necho 'React dashboard with TypeScript and Tailwind CSS'\necho ''\necho '## Commands'\necho '- npm run dev    # Start development server'\necho '- npm test       # Run test suite'\necho ''\necho '## Code Style'\necho '- Use functional components with hooks'\necho '- Prefer named exports'"
-      demo: true
-      demoDelay: 40
-    onSuccess: "This structure gives Claude essential context about your project from the start."
+      text: "The easiest way to create a CLAUDE.md file is using the slash init command inside a Claude Code session. But you can also see what permissions and tools are available using the dash dash allowedTools flag."
+
+  - id: try-allowed-tools
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Let's explore tool restrictions. Type 'claude --allowedTools --help' to see how to control which tools Claude can use."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: claude --allowedTools --help"
+      - "Tools are the actions Claude can perform"
+      - "You can restrict tools for safety"
+    onSuccess: "Understanding tool permissions is key to configuring safe and effective Claude Code sessions."
+
+  - id: permission-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Claude Code has a permission system that controls what actions require approval. The dash dash permission-mode flag lets you set how strict these permissions are. This is important for balancing productivity with safety."
+
+  - id: try-permission-mode
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Type 'claude --permission-mode --help' to see the different permission levels available."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: claude --permission-mode --help"
+      - "Permission modes control approval requirements"
+      - "Choose based on your trust level and use case"
+    onSuccess: "Permission modes help you control the balance between automation and manual approval."
+
+  - id: output-format-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "When integrating Claude Code into scripts or other tools, you can control the output format. The dash dash output-format flag lets you choose between text, JSON, or streaming JSON output."
+
+  - id: try-output-format
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Type 'claude --output-format --help' to explore the output formatting options."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: claude --output-format --help"
+      - "JSON output is useful for scripting"
+      - "Stream-json enables real-time processing"
+    onSuccess: "Output format control is essential when building automation around Claude Code."
 
   - id: best-practices
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Some best practices: Keep your CLAUDE.md concise but complete. Include commands Claude might need to run. Document any non-obvious project conventions. Update it as your project evolves. And remember, you can use directory-specific files for specialized areas like your API or components folder."
+      text: "Some best practices for CLAUDE.md: Keep it concise but complete. Include commands Claude might need to run. Document any non-obvious project conventions. Update it as your project evolves. And remember, you can use directory-specific files for specialized areas."
 
-  - id: try-date
+  - id: try-verbose
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "One more quick practice. Type 'date' to see the current date and time."
+      text: "Finally, let's check the verbose mode. Type 'claude --verbose --help' to see how to get detailed logging."
     validation:
       type: output-contains
       value: ""
     hints:
-      - "Type: date"
-      - "date shows the current system time"
-    onSuccess: "The date command confirms the system is working correctly."
+      - "Type: claude --verbose --help"
+      - "Verbose mode shows detailed operation logs"
+      - "Useful for debugging issues"
+    onSuccess: "Verbose mode is invaluable when troubleshooting Claude Code behavior."
 
   - id: completion
     type: voice
     voice:
       speaker: Finn
-      text: "Hei hei! You've learned all about CLAUDE.md files! You understand the hierarchy, know how to use slash init, and have seen what good configuration looks like. This knowledge will make Claude Code work much better for your specific projects. Veldig bra! You're becoming a Claude Code expert!"
+      text: "Hei hei! You've learned all about CLAUDE.md files and Claude Code configuration! You understand the hierarchy, tool permissions, permission modes, and output formats. This knowledge will make Claude Code work much better for your specific projects. Veldig bra! You're becoming a Claude Code expert!"

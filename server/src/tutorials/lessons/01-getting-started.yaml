@@ -2,14 +2,14 @@ id: getting-started
 title: Getting Started with Claude Code
 level: beginner
 duration: "10 min"
-description: Learn the basics of Claude Code CLI - checking installation, getting help, and running your first commands.
+description: Learn the basics of Claude Code CLI - checking installation, getting help, and understanding the command structure.
 
 steps:
   - id: welcome
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Hello and welcome to Claude Code training! I'm Elisabeth, and I'll be your guide today. In this lesson, you'll learn how to verify your Claude Code installation and explore the basic commands. Let's get started!"
+      text: "Hello and welcome to Claude Code training! I'm Elisabeth, and I'll be your guide today. In this lesson, you'll learn how to verify your Claude Code installation, explore the available commands, and understand the basic command structure. Let's get started!"
 
   - id: check-version
     type: demo
@@ -40,34 +40,50 @@ steps:
     type: voice
     voice:
       speaker: Elisabeth
-      text: "The help output shows you many useful flags. The most important ones for beginners are: dash p for print mode which runs a single query, dash c to continue your last conversation, and dash r to resume a previous session. Let's try print mode next."
+      text: "The help output shows you many useful flags. The most important ones for beginners are: dash p for print mode which runs a single query, dash c to continue your last conversation, and dash r to resume a previous session. Let's explore print mode."
 
-  - id: print-mode-demo
-    type: demo
+  - id: print-mode-explain
+    type: voice
     voice:
       speaker: Elisabeth
-      text: "Print mode is perfect for quick one-off questions. Watch how I use the dash p flag with a simple query."
-    terminal:
-      command: "echo 'Example: claude -p \"What is TypeScript?\"'"
-      demo: true
-      demoDelay: 60
-    onSuccess: "In a real session, Claude would respond with an explanation and then exit automatically."
+      text: "Print mode, activated with dash p, is perfect for quick one-off questions. Claude will answer your query and then exit immediately, without starting an interactive session. This is great for scripting or getting quick answers."
 
-  - id: try-echo
+  - id: try-print-help
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's practice with a simple echo command. Type 'echo Hello Claude Code' and press Enter."
+      text: "Let's see the specific help for print mode. Type 'claude -p --help' to see the print mode options."
     validation:
       type: output-contains
-      value: "Hello Claude Code"
+      value: "print"
     hints:
-      - "Type: echo Hello Claude Code"
-      - "Echo simply prints back whatever text you give it"
-    onSuccess: "You've successfully run a terminal command. This same terminal will be used when practicing with Claude Code."
+      - "Type: claude -p --help"
+      - "This shows options specific to print mode"
+      - "You can combine flags like -p with --help"
+    onSuccess: "Great! You can see the print mode specific options. Notice how flags can be combined."
+
+  - id: config-explain
+    type: voice
+    voice:
+      speaker: Elisabeth
+      text: "Claude Code stores its configuration in your home directory under dot claude. This includes your sessions, settings, and any global CLAUDE.md file. Let's check what configuration options are available."
+
+  - id: try-config
+    type: interactive
+    voice:
+      speaker: Elisabeth
+      text: "Type 'claude config list' to see your current Claude Code configuration settings."
+    validation:
+      type: output-contains
+      value: ""
+    hints:
+      - "Type: claude config list"
+      - "This displays your current settings"
+      - "Configuration controls Claude Code behavior"
+    onSuccess: "You've viewed your configuration. These settings control how Claude Code behaves in your sessions."
 
   - id: completion
     type: voice
     voice:
       speaker: Finn
-      text: "Hei! Congratulations! You've completed your first lesson! You now know how to check the Claude Code version, view help, and understand the basic command structure. Fantastisk job! See you in the next lesson!"
+      text: "Hei! Congratulations! You've completed your first lesson! You now know how to check the Claude Code version, view help for commands, and explore configuration. Fantastisk job! See you in the next lesson!"

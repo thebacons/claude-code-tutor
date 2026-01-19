@@ -40,50 +40,50 @@ steps:
     type: voice
     voice:
       speaker: Elisabeth
-      text: "The help output shows you many useful flags. The most important ones for beginners are: dash p for print mode which runs a single query, dash c to continue your last conversation, and dash r to resume a previous session. Let's explore print mode."
+      text: "The help output shows you many useful flags. The most important ones for beginners are: dash p for print mode which runs a single query, dash c to continue your last conversation, and dash r to resume a previous session. Claude Code also has subcommands like mcp, plugin, and doctor."
 
-  - id: print-mode-explain
+  - id: subcommands-explain
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Print mode, activated with dash p, is perfect for quick one-off questions. Claude will answer your query and then exit immediately, without starting an interactive session. This is great for scripting or getting quick answers."
+      text: "Claude Code has several subcommands. The main ones are: mcp for managing Model Context Protocol servers, plugin for managing plugins, and doctor for checking installation health. Let's explore these."
 
-  - id: try-print-help
+  - id: try-mcp-help
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's see the specific help for print mode. Type 'claude -p --help' to see the print mode options."
+      text: "Type 'claude mcp --help' to see all the MCP server management options."
     validation:
       type: output-contains
-      value: "print"
+      value: "Configure and manage MCP servers"
     hints:
-      - "Type: claude -p --help"
-      - "This shows options specific to print mode"
-      - "You can combine flags like -p with --help"
-    onSuccess: "Great! You can see the print mode specific options. Notice how flags can be combined."
+      - "Type: claude mcp --help"
+      - "MCP servers extend Claude Code's capabilities"
+      - "This shows commands like add, list, and remove"
+    onSuccess: "Great! You can see MCP management commands like add, list, get, and remove."
 
-  - id: config-explain
+  - id: mcp-list-explain
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Claude Code stores its configuration in your home directory under dot claude. This includes your sessions, settings, and any global CLAUDE.md file. Let's check what configuration options are available."
+      text: "The mcp list command shows all configured MCP servers. These servers provide additional tools and capabilities to Claude Code, like browser automation, database access, or custom integrations."
 
-  - id: try-config
+  - id: try-mcp-list
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Type 'claude config list' to see your current Claude Code configuration settings."
+      text: "Type 'claude mcp list' to see your currently configured MCP servers."
     validation:
       type: output-contains
       value: ""
     hints:
-      - "Type: claude config list"
-      - "This displays your current settings"
-      - "Configuration controls Claude Code behavior"
-    onSuccess: "You've viewed your configuration. These settings control how Claude Code behaves in your sessions."
+      - "Type: claude mcp list"
+      - "This lists all configured MCP servers"
+      - "You may see Connected or disconnected status"
+    onSuccess: "You've listed your MCP servers. Each server provides additional tools to Claude Code."
 
   - id: completion
     type: voice
     voice:
       speaker: Finn
-      text: "Hei! Congratulations! You've completed your first lesson! You now know how to check the Claude Code version, view help for commands, and explore configuration. Fantastisk job! See you in the next lesson!"
+      text: "Hei! Congratulations! You've completed your first lesson! You now know how to check the Claude Code version, view help, and explore MCP server management. Fantastisk job! See you in the next lesson!"

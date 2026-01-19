@@ -1,15 +1,15 @@
 id: session-management
-title: Session Management
+title: Session Management & Plugins
 level: beginner
 duration: "12 min"
-description: Learn how to continue conversations, resume sessions, and manage your Claude Code history effectively.
+description: Learn how to manage plugins, continue conversations, and understand Claude Code's extension system.
 
 steps:
   - id: welcome
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Welcome back! In this lesson, we'll explore session management in Claude Code. You'll learn how to continue conversations, resume old sessions, and view your session history. These features are essential for maintaining context across coding sessions."
+      text: "Welcome back! In this lesson, we'll explore session management and the plugin system in Claude Code. You'll learn how to continue conversations, manage plugins, and extend Claude Code's capabilities."
 
   - id: explain-sessions
     type: voice
@@ -21,83 +21,70 @@ steps:
     type: voice
     voice:
       speaker: Elisabeth
-      text: "The simplest way to continue working is with the dash c flag. This picks up your most recent conversation. You don't need to remember any session ID - Claude Code automatically finds your last session."
+      text: "The simplest way to continue working is with the dash c flag. This picks up your most recent conversation. You don't need to remember any session ID - Claude Code automatically finds your last session. The dash r flag lets you resume a specific session by ID."
 
-  - id: try-continue-help
-    type: interactive
-    voice:
-      speaker: Elisabeth
-      text: "Let's explore the continue option. Type 'claude -c --help' to see how the continue flag works."
-    validation:
-      type: output-contains
-      value: ""
-    hints:
-      - "Type: claude -c --help"
-      - "The -c flag continues your most recent session"
-    onSuccess: "The dash c flag is your go-to option when you want to keep working on what you started earlier."
-
-  - id: resume-explain
+  - id: plugin-explain
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Sometimes you want to resume a specific session, not just the most recent one. The dash r flag lets you resume any previous session. You can either use it without an argument to see a list, or provide a session ID directly."
+      text: "Claude Code has a powerful plugin system. Plugins extend functionality with custom skills, commands, and integrations. Let's explore the plugin management commands."
 
-  - id: try-resume-help
+  - id: try-plugin-help
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's check the resume options. Type 'claude -r --help' to see how session resumption works."
+      text: "Type 'claude plugin --help' to see all the plugin management commands."
     validation:
       type: output-contains
-      value: ""
+      value: "Manage Claude Code plugins"
     hints:
-      - "Type: claude -r --help"
-      - "The -r flag resumes a specific session"
-      - "You can provide a session ID after -r"
-    onSuccess: "When you know the exact session you want, providing the ID after dash r is the fastest way to resume."
+      - "Type: claude plugin --help"
+      - "This shows commands like install, list, enable, disable"
+      - "Plugins extend Claude Code's capabilities"
+    onSuccess: "You can see the plugin commands: install, list, enable, disable, uninstall, and update."
 
-  - id: mcp-explain
+  - id: plugin-list-explain
     type: voice
     voice:
       speaker: Elisabeth
-      text: "Claude Code can connect to MCP servers which provide additional tools and capabilities. The dash dash mcp-debug flag helps you troubleshoot MCP connections if something isn't working correctly."
+      text: "The plugin list command shows all installed plugins and their status. You can see which plugins are enabled or disabled, and their version numbers."
 
-  - id: try-mcp-help
+  - id: try-plugin-list
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Let's see the MCP debugging options. Type 'claude --mcp-debug --help' to explore MCP features."
+      text: "Type 'claude plugin list' to see your installed plugins."
     validation:
       type: output-contains
       value: ""
     hints:
-      - "Type: claude --mcp-debug --help"
-      - "MCP servers extend Claude Code's capabilities"
-      - "Debug mode shows detailed connection info"
-    onSuccess: "MCP debugging is invaluable when setting up custom tool integrations with Claude Code."
+      - "Type: claude plugin list"
+      - "This shows all installed plugins"
+      - "You'll see the plugin name, version, and status"
+    onSuccess: "You've listed your installed plugins. Each plugin can add new skills and capabilities."
 
-  - id: model-explain
+  - id: marketplace-explain
     type: voice
     voice:
       speaker: Elisabeth
-      text: "You can also control which AI model Claude Code uses. The dash dash model flag lets you specify a particular model version. This is useful when you need specific capabilities or want to test with different models."
+      text: "Plugins can be installed from marketplaces. The plugin marketplace command lets you manage which plugin sources Claude Code can use. This is useful for accessing official and community plugins."
 
-  - id: try-model-help
+  - id: try-marketplace-help
     type: interactive
     voice:
       speaker: Elisabeth
-      text: "Type 'claude --model --help' to see how to select different AI models."
+      text: "Type 'claude plugin marketplace --help' to see marketplace management options."
     validation:
       type: output-contains
       value: ""
     hints:
-      - "Type: claude --model --help"
-      - "Different models have different capabilities"
-      - "Model selection affects response quality and speed"
-    onSuccess: "You can now specify which model to use for your Claude Code sessions."
+      - "Type: claude plugin marketplace --help"
+      - "Marketplaces are sources for plugins"
+      - "You can add custom marketplaces"
+    onSuccess: "Marketplace management lets you configure where plugins come from."
 
   - id: completion
     type: voice
     voice:
       speaker: Finn
-      text: "Hei there! You've mastered session management! You now know how to continue with dash c, resume specific sessions with dash r, debug MCP connections, and select AI models. These skills will make your Claude Code workflow much more efficient. Kjempe bra!"
+      text: "Hei there! You've learned about session management and the plugin system! You know how to continue sessions, list plugins, and explore marketplaces. These skills will help you extend Claude Code with powerful new capabilities. Kjempe bra!"
